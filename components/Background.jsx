@@ -7,6 +7,7 @@ import * as THREE from "three";
 import vertexShader from "@/shaders/background.vert.glsl";
 import fragmentShader from "@/shaders/background.frag.glsl";
 import { PALETTE } from "@/lib/sections";
+import { useScrollStore } from "@/store/scroll";
 
 export default function Background() {
   const materialRef = useRef();
@@ -31,9 +32,15 @@ export default function Background() {
     }
   }, [size.width, size.height]);
 
+  const dampedScroll = useRef(0);
+
   useFrame((_, delta) => {
+    const targetProgress = useScrollStore.getState().progress;
+    dampedScroll.current += (targetProgress - dampedScroll.current) * 0.08;
+
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value += delta;
+      materialRef.current.uniforms.uProgress.value = dampedScroll.current;
     }
   });
 
