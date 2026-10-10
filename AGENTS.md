@@ -98,7 +98,7 @@ At Checkpoint 0, write the installed versions of `next`, `react`, `three`, `@rea
 Create exactly this structure. Do not add top-level folders without approval.
 
 ```
-tag-grid/
+Aether/
 ├── app/
 │   ├── layout.js          # Root layout, font loading, metadata, global wrapper
 │   ├── page.js            # Landing page: scroll container, section content
