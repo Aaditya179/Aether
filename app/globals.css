@@ -8,12 +8,32 @@
   --color-glow: #22e4ff;
   --color-text: #f5f5f5;
   --color-text-inverse: #0b0b0c;
+
+  /* Layout outer margins per Section 4.4 */
+  --page-margin: 48px;
+}
+
+@media (max-width: 1279px) {
+  :root {
+    --page-margin: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --page-margin: 20px;
+  }
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent-a);
+  outline-offset: 3px;
 }
 
 html,

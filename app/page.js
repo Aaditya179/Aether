@@ -6,9 +6,13 @@
 import { useEffect } from "react";
 import Scene from "@/components/Scene";
 import SectionCounter from "@/components/SectionCounter";
-import { initScrollStore } from "@/store/scroll";
+import Headline from "@/components/Headline";
+import { initScrollStore, useScrollStore } from "@/store/scroll";
+import { SECTIONS, getLocalProgress } from "@/lib/sections";
 
 export default function Home() {
+  const progress = useScrollStore((state) => state.progress);
+
   useEffect(() => {
     const cleanup = initScrollStore();
     return cleanup;
@@ -18,6 +22,8 @@ export default function Home() {
     <>
       <SectionCounter />
       <Scene />
+
+      {/* 600vh scroll container divided into section ranges */}
       <div
         style={{
           position: "relative",
@@ -25,6 +31,7 @@ export default function Home() {
           height: "600vh",
         }}
       >
+        {/* Sticky viewport container anchoring text in the lower-left third */}
         <main
           style={{
             position: "sticky",
@@ -33,43 +40,30 @@ export default function Home() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
-            padding: "48px",
+            padding: "var(--page-margin)",
             pointerEvents: "none",
           }}
         >
           <div
             style={{
-              backgroundColor: "var(--color-base, #0b0b0c)",
-              border: "1px solid var(--color-glow, #22e4ff)",
-              padding: "24px 32px",
-              maxWidth: "520px",
-              pointerEvents: "auto",
+              position: "relative",
+              width: "100%",
+              maxWidth: "540px",
+              minHeight: "220px",
             }}
           >
-            {/* PLACEHOLDER COPY */}
-            <h1
-              style={{
-                fontFamily: "var(--font-anton), sans-serif",
-                fontSize: "clamp(48px, 8vw, 100px)",
-                lineHeight: 0.9,
-                letterSpacing: "0.01em",
-                color: "var(--color-text, #f5f5f5)",
-                textTransform: "uppercase",
-              }}
-            >
-              TAG GRID
-            </h1>
-            <p
-              style={{
-                fontFamily: "var(--font-space-mono), monospace",
-                fontSize: "16px",
-                lineHeight: 1.6,
-                color: "var(--color-text, #f5f5f5)",
-                marginTop: "16px",
-              }}
-            >
-              Scroll to draw the line.
-            </p>
+            {SECTIONS.map((section, idx) => {
+              const localProgress = getLocalProgress(progress, idx);
+              return (
+                <Headline
+                  key={section.index}
+                  section={section}
+                  localProgress={localProgress}
+                  isFirst={idx === 0}
+                  isLast={idx === SECTIONS.length - 1}
+                />
+              );
+            })}
           </div>
         </main>
       </div>

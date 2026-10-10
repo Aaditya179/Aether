@@ -547,7 +547,7 @@ Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your
 - [x] CP2: Background shader
 - [x] CP3: Static wireframe
 - [x] CP4: Scroll store and container
-- [ ] CP5: Wireframe draw-in
+- [x] CP5: Wireframe draw-in
 - [ ] CP6: Section text and layout
 - [ ] CP7: Palette shifts
 - [ ] CP8: Final section collapse
@@ -555,7 +555,7 @@ Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your
 - [ ] CP10: Polish, performance, and accessibility
 - [ ] CP11: Handoff
 
-**Current checkpoint:** CP5
+**Current checkpoint:** CP6
 
 ---
 
