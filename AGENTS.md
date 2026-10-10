@@ -543,7 +543,7 @@ Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your
 
 - [x] CP0: Project setup
 - [x] CP1: Full-screen canvas
-- [ ] CP1.5: CI/CD pipeline and Vercel deployment (deferred)
+- [x] CP1.5: CI/CD pipeline and Vercel deployment
 - [x] CP2: Background shader
 - [x] CP3: Static wireframe
 - [x] CP4: Scroll store and container
@@ -552,10 +552,10 @@ Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your
 - [x] CP7: Palette shifts
 - [x] CP8: Final section collapse
 - [x] CP9: Bloom and glow
-- [ ] CP10: Polish, performance, and accessibility
+- [x] CP10: Polish, performance, and accessibility
 - [ ] CP11: Handoff
 
-**Current checkpoint:** CP10
+**Current checkpoint:** CP11
 
 ---
 

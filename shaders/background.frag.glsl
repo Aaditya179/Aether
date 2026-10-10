@@ -1,5 +1,6 @@
 // Fragment shader generating the posterized graffiti shape background.
 // Uses domain-warped noise quantized into flat color tiers matching the active palette.
+// Dynamically layers, paints, and reveals graffiti spray strokes as the visitor scrolls.
 
 precision highp float;
 
@@ -56,7 +57,7 @@ float fbm(vec2 p) {
   return f;
 }
 
-// Domain-warped noise creates blobby street-art strokes
+// Domain-warped noise creates blobby street-art letterforms and spray strokes
 float domainWarp(vec2 p, float drift) {
   vec2 q = vec2(
     fbm(p + vec2(0.0, 0.0) + drift),
@@ -74,20 +75,35 @@ void main() {
     ? vec2(uResolution.x / max(uResolution.y, 1.0), 1.0)
     : vec2(1.0, uResolution.y / max(uResolution.x, 1.0));
 
-  vec2 p = vUv * aspect * 2.2;
+  // Base domain coordinates with aspect ratio compensation
+  vec2 baseP = vUv * aspect * 2.2;
 
-  // Slow shape drift at 5% of normal speed per Section 4.8
+  // Slow ambient drift at 5% of normal speed per Section 4.8
   float drift = uTime * 0.05;
+
+  // Scroll parallax & reactive graffiti displacement
+  vec2 scrollDisplacement = vec2(uProgress * 0.35, -uProgress * 0.65);
+  vec2 p = baseP + scrollDisplacement;
 
   float rawVal = domainWarp(p, drift);
 
   // Hand-painted uneven edge treatment with small high-frequency noise offset (amplitude ~0.02)
   float edgeNoise = snoise(p * 32.0) * 0.02;
 
-  // Normalization and stroke-in threshold modulation
+  // Normalization of base domain warp value
   float val = (rawVal + 1.0) * 0.5;
 
-  float tBase = 0.38 + edgeNoise + (1.0 - uStrokeIn) * 0.5;
+  // Dynamically paint in secondary graffiti tags and splatter as the visitor scrolls down
+  // Spray splatter cuts in progressively with scroll travel
+  float spraySplatter = snoise(p * 9.0 + vec2(uProgress * 1.5, drift)) * 0.12;
+  float graffitiStrokes = snoise(p * 4.5 - vec2(drift, uProgress * 2.2)) * 0.15;
+
+  // Modulate graffiti complexity: fresh paint layers spray onto the surface as uProgress increases
+  float scrollGraffitiBoost = uProgress * (spraySplatter + graffitiStrokes);
+  val = clamp(val + scrollGraffitiBoost, 0.0, 1.0);
+
+  // Original continuous posterized thresholds
+  float tBase = 0.38 + edgeNoise;
   float tAccent = 0.62 + edgeNoise;
 
   // Strict quantization into 3 flat posterized color blocks: base, accent B, accent A
@@ -100,7 +116,7 @@ void main() {
     finalColor = uColorAccentA;
   }
 
-  // Clamped below bloom threshold (0.6) so background edges stay crisp without bloom wash
-  vec3 outputColor = finalColor * 0.52;
+  // Continuous vibrant graffiti background
+  vec3 outputColor = finalColor * 0.8;
   fragColor = vec4(outputColor, 1.0);
 }

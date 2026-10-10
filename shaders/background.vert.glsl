@@ -1,9 +1,6 @@
 // Vertex shader for the full-screen background quad.
 // Positions a screen-filling quad in clip space without perspective transformation.
 
-in vec3 position;
-in vec2 uv;
-
 out vec2 vUv;
 
 void main() {

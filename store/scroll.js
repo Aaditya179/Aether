@@ -40,18 +40,6 @@ export function initScrollStore() {
   motionQuery.addEventListener("change", handleMotionChange);
 
   let lenisInstance = null;
-  if (!motionQuery.matches) {
-    lenisInstance = new Lenis({
-      autoRaf: true,
-      smoothWheel: true,
-    });
-
-    lenisInstance.on("scroll", (e) => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? e.scroll / maxScroll : 0;
-      useScrollStore.getState().setProgress(progress);
-    });
-  }
 
   const updateScroll = () => {
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -60,16 +48,42 @@ export function initScrollStore() {
     useScrollStore.getState().setProgress(progress);
   };
 
+  if (!motionQuery.matches) {
+    lenisInstance = new Lenis({
+      autoRaf: true,
+      smoothWheel: true,
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+
+    lenisInstance.on("scroll", (e) => {
+      // Lenis provides e.progress normalized directly (0 to 1)
+      const progress = typeof e.progress === "number" ? e.progress : 0;
+      useScrollStore.getState().setProgress(progress);
+    });
+  } else {
+    // Only register native scroll listener when Lenis is disabled (reduced motion)
+    window.addEventListener("scroll", updateScroll, { passive: true });
+  }
+
+  // Initial sync
   updateScroll();
-  window.addEventListener("scroll", updateScroll, { passive: true });
-  window.addEventListener("resize", updateScroll, { passive: true });
+
+  const handleResize = () => {
+    if (lenisInstance) {
+      lenisInstance.resize();
+    }
+    updateScroll();
+  };
+  window.addEventListener("resize", handleResize, { passive: true });
 
   return () => {
     motionQuery.removeEventListener("change", handleMotionChange);
     if (lenisInstance) {
       lenisInstance.destroy();
+    } else {
+      window.removeEventListener("scroll", updateScroll);
     }
-    window.removeEventListener("scroll", updateScroll);
-    window.removeEventListener("resize", updateScroll);
+    window.removeEventListener("resize", handleResize);
   };
 }

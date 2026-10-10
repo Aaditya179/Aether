@@ -1,5 +1,5 @@
 // Fragment shader for the glowing wireframe lines.
-// Renders anti-aliased line segments with soft falloff glow and brightness scaling.
+// Renders anti-aliased line segments with bold solid core and radiant neon corona.
 
 precision highp float;
 
@@ -19,19 +19,32 @@ void main() {
     discard;
   }
 
-  // Soft falloff: 1.0 at center line, 0.0 at 1.5 CSS pixels (scaled by DPR)
-  float maxDist = 1.5 * uDpr;
+  float maxDist = 4.0 * uDpr;
   float dist = abs(vDistPx);
-  float falloff = clamp(1.0 - (dist / maxDist), 0.0, 1.0);
 
-  // Soft glow intensity falloff curve
-  float intensity = falloff * falloff;
+  // Bold solid neon core up to 2.0 CSS pixels (4.0px full core)
+  float coreDist = 2.0 * uDpr;
+  float intensity;
+  if (dist <= coreDist) {
+    intensity = 1.0;
+  } else {
+    // Smooth luminous falloff outward from solid core
+    float t = (dist - coreDist) / (maxDist - coreDist);
+    intensity = clamp(1.0 - t, 0.0, 1.0);
+    intensity = intensity * intensity;
+  }
 
-  // HDR radiation past bloom threshold (0.6) for ethereal cyber corona
-  vec3 rgb = uColorGlow * intensity * (uGlow * 1.5);
-  float alpha = intensity * clamp(uGlow, 0.0, 1.0);
+  // White-hot center: core blends towards pure bright white, outer halo is neon cyan
+  vec3 neonBase = uColorGlow;
+  vec3 hotWhite = vec3(1.0, 1.0, 1.0);
+  float hotFactor = clamp((coreDist - dist) / coreDist, 0.0, 1.0);
+  vec3 coreColor = mix(neonBase, hotWhite, hotFactor * 0.75);
 
-  if (alpha < 0.002) {
+  // High HDR output to trigger intense radiant bloom corona
+  vec3 rgb = coreColor * intensity * (uGlow * 2.4);
+  float alpha = clamp(intensity * 1.8, 0.0, 1.0);
+
+  if (alpha < 0.005) {
     discard;
   }
 

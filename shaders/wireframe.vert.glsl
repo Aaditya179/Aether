@@ -2,7 +2,6 @@
 // Expands edge lines into screen-space camera-facing quads with pixel-accurate widths
 // and morphs between 3D object edges and flat 2D viewport grid state.
 
-in vec3 position;
 in vec3 pointOther;
 in vec3 positionGrid;
 in vec3 pointOtherGrid;
@@ -12,8 +11,6 @@ in float segmentProg;
 out float vDistPx;
 out float vSegmentProg;
 
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
 uniform vec2 uResolution;
 uniform float uDpr;
 uniform float uCollapse;
@@ -38,8 +35,8 @@ void main() {
   float len = length(dir);
   vec2 normal = len > 0.0001 ? vec2(-dir.y, dir.x) / len : vec2(0.0, 1.0);
 
-  // Soft falloff distance: 1.5 CSS pixels scaled by DPR
-  float maxDistPx = 1.5 * uDpr;
+  // Bold line width: 4.0 CSS pixels half-width (8.0px total) scaled by DPR
+  float maxDistPx = 4.0 * uDpr;
   vec2 offsetPx = normal * (side * maxDistPx);
 
   // Convert pixel offset back to clip space

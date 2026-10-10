@@ -83,6 +83,7 @@ export default function Background() {
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value += delta;
       materialRef.current.uniforms.uProgress.value = dampedScroll.current;
+      materialRef.current.uniforms.uStrokeIn.value = 1.0;
 
       // 0.25-second crossfade between palettes per Section 4.2 & CP7
       const crossfadeStep = Math.min(1.0, delta / PALETTE_CROSSFADE_SECONDS);

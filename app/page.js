@@ -6,13 +6,40 @@
 import { useEffect } from "react";
 import Scene from "@/components/Scene";
 import SectionCounter from "@/components/SectionCounter";
+import GraffitiTags from "@/components/GraffitiTags";
 import Headline from "@/components/Headline";
 import { initScrollStore, useScrollStore } from "@/store/scroll";
 import { SECTIONS, getLocalProgress } from "@/lib/sections";
 
-export default function Home() {
+function SectionHeadlines() {
   const progress = useScrollStore((state) => state.progress);
 
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        maxWidth: "540px",
+        minHeight: "220px",
+      }}
+    >
+      {SECTIONS.map((section, idx) => {
+        const localProgress = getLocalProgress(progress, idx);
+        return (
+          <Headline
+            key={section.index}
+            section={section}
+            localProgress={localProgress}
+            isFirst={idx === 0}
+            isLast={idx === SECTIONS.length - 1}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+export default function Home() {
   useEffect(() => {
     const cleanup = initScrollStore();
     return cleanup;
@@ -25,6 +52,7 @@ export default function Home() {
       </a>
       <SectionCounter />
       <Scene />
+      <GraffitiTags />
 
       {/* 600vh scroll container divided into section ranges */}
       <div
@@ -49,27 +77,7 @@ export default function Home() {
             pointerEvents: "none",
           }}
         >
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              maxWidth: "540px",
-              minHeight: "220px",
-            }}
-          >
-            {SECTIONS.map((section, idx) => {
-              const localProgress = getLocalProgress(progress, idx);
-              return (
-                <Headline
-                  key={section.index}
-                  section={section}
-                  localProgress={localProgress}
-                  isFirst={idx === 0}
-                  isLast={idx === SECTIONS.length - 1}
-                />
-              );
-            })}
-          </div>
+          <SectionHeadlines />
         </main>
       </div>
     </>
