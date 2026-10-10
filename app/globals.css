@@ -1,0 +1,25 @@
+/* All global styles, CSS custom properties, and base layout rules.
+   Centralizes color tokens, font variable bindings, and reset rules across the site. */
+
+:root {
+  --color-base: #0b0b0c;
+  --color-accent-a: #d7ff3a;
+  --color-accent-b: #ff2e88;
+  --color-glow: #22e4ff;
+  --color-text: #f5f5f5;
+  --color-text-inverse: #0b0b0c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background-color: var(--color-base);
+  color: var(--color-text);
+  font-family: var(--font-space-mono), monospace;
+  min-height: 100%;
+}
