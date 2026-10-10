@@ -89,6 +89,7 @@ export default function Scene() {
         aria-hidden="true"
       >
         <Canvas
+          aria-hidden="true"
           dpr={isMobile ? [1, 1.5] : [1, 2]}
           gl={{ antialias: true, alpha: false }}
           camera={{ position: [0, 0, 5], fov: 45 }}

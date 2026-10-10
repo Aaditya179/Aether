@@ -20,6 +20,9 @@ export default function Home() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       <SectionCounter />
       <Scene />
 
@@ -33,6 +36,8 @@ export default function Home() {
       >
         {/* Sticky viewport container anchoring text in the lower-left third */}
         <main
+          id="main-content"
+          tabIndex={-1}
           style={{
             position: "sticky",
             top: 0,

@@ -118,6 +118,7 @@ export default function Wireframe() {
 
   const dampedScroll = useRef(0);
   const currentDrawProgress = useRef(0);
+  const idleRotY = useRef(0);
 
   const geometry = useMemo(() => {
     const box = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
@@ -198,17 +199,34 @@ export default function Wireframe() {
       }
     }
 
-    // 3. Object Rotation (Section 2: 0 to 360 deg on Y, leveling out as it collapses to grid)
+    // 3. Object Rotation (Section 2: 0 to 360 deg on Y, plus idle motion when still for >1.5s)
     if (meshRef.current) {
       let rotY = Math.PI / 4;
       let rotX = Math.PI / 6;
 
-      if (!reducedMotion && dampedScroll.current >= SECTION_2_START) {
-        const localRot = Math.min(
-          1.0,
-          (dampedScroll.current - SECTION_2_START) / (SECTION_2_END - SECTION_2_START)
-        );
-        rotY += localRot * Math.PI * 2;
+      if (!reducedMotion) {
+        if (dampedScroll.current >= SECTION_2_START) {
+          const localRot = Math.min(
+            1.0,
+            (dampedScroll.current - SECTION_2_START) / (SECTION_2_END - SECTION_2_START)
+          );
+          rotY += localRot * Math.PI * 2;
+        }
+
+        // Idle motion: when page is still for >1.5s, rotate on Y at 6 deg/s per Section 4.10
+        const now = performance.now();
+        const isIdle = now - store.lastScrollTime > 1500;
+        if (isIdle) {
+          idleRotY.current += ((6 * Math.PI) / 180) * delta;
+        } else {
+          idleRotY.current = 0;
+        }
+        rotY += idleRotY.current;
+      } else {
+        // Reduced motion: skip 3D rotation tilts per Section 6
+        rotX = 0;
+        rotY = 0;
+        idleRotY.current = 0;
       }
 
       // Smoothly flatten rotation to front-facing grid when collapsing

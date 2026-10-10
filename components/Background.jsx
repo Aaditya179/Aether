@@ -67,6 +67,19 @@ export default function Background() {
     targetColorA.current.set(currentSectionPalette.accentA);
     targetColorB.current.set(currentSectionPalette.accentB);
 
+    // Reduced motion handling: keep background static at Section 1 appearance per Section 6
+    if (store.reducedMotion) {
+      const s1Palette = getSectionPalette(1);
+      targetColorA.current.set(s1Palette.accentA);
+      targetColorB.current.set(s1Palette.accentB);
+      if (materialRef.current) {
+        materialRef.current.uniforms.uColorAccentA.value.copy(targetColorA.current);
+        materialRef.current.uniforms.uColorAccentB.value.copy(targetColorB.current);
+        materialRef.current.uniforms.uProgress.value = 0.2;
+      }
+      return;
+    }
+
     if (materialRef.current) {
       materialRef.current.uniforms.uTime.value += delta;
       materialRef.current.uniforms.uProgress.value = dampedScroll.current;

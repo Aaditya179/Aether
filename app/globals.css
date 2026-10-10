@@ -43,3 +43,34 @@ body {
   font-family: var(--font-space-mono), monospace;
   min-height: 100%;
 }
+
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 24px;
+  background-color: var(--color-base);
+  color: var(--color-accent-a);
+  border: 2px solid var(--color-accent-a);
+  padding: 8px 16px;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  z-index: 1000;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 24px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
