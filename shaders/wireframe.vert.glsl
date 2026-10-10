@@ -1,8 +1,11 @@
 // Vertex shader for wireframe objects and edge geometries.
-// Expands edge lines into screen-space camera-facing quads with pixel-accurate widths.
+// Expands edge lines into screen-space camera-facing quads with pixel-accurate widths
+// and morphs between 3D object edges and flat 2D viewport grid state.
 
 in vec3 position;
 in vec3 pointOther;
+in vec3 positionGrid;
+in vec3 pointOtherGrid;
 in float side;
 in float segmentProg;
 
@@ -13,10 +16,15 @@ uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform vec2 uResolution;
 uniform float uDpr;
+uniform float uCollapse;
 
 void main() {
-  vec4 clipA = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  vec4 clipB = projectionMatrix * modelViewMatrix * vec4(pointOther, 1.0);
+  // Morph between 3D geometry edges and flat 2D grid edges
+  vec3 pA = mix(position, positionGrid, uCollapse);
+  vec3 pB = mix(pointOther, pointOtherGrid, uCollapse);
+
+  vec4 clipA = projectionMatrix * modelViewMatrix * vec4(pA, 1.0);
+  vec4 clipB = projectionMatrix * modelViewMatrix * vec4(pB, 1.0);
 
   // Normalize to NDC
   vec2 ndcA = clipA.xy / clipA.w;
