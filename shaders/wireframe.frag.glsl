@@ -4,7 +4,7 @@
 precision highp float;
 
 in float vDistPx;
-in float vSegmentIndex;
+in float vSegmentProg;
 
 out vec4 fragColor;
 
@@ -14,8 +14,8 @@ uniform float uDrawProgress;
 uniform float uDpr;
 
 void main() {
-  // Hide segments that have not drawn in yet
-  if (vSegmentIndex > uDrawProgress) {
+  // Continuous smooth reveal: discard fragments beyond current draw progress
+  if (vSegmentProg > uDrawProgress) {
     discard;
   }
 
@@ -24,7 +24,7 @@ void main() {
   float dist = abs(vDistPx);
   float falloff = clamp(1.0 - (dist / maxDist), 0.0, 1.0);
 
-  // Soft falloff curve
+  // Soft glow intensity falloff curve
   float intensity = falloff * falloff;
 
   vec3 rgb = uColorGlow * intensity * uGlow;

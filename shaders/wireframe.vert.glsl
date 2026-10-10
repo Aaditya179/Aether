@@ -4,10 +4,10 @@
 in vec3 position;
 in vec3 pointOther;
 in float side;
-in float segmentIndex;
+in float segmentProg;
 
 out float vDistPx;
-out float vSegmentIndex;
+out float vSegmentProg;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
@@ -41,5 +41,5 @@ void main() {
 
   gl_Position = finalClip;
   vDistPx = side * maxDistPx;
-  vSegmentIndex = segmentIndex;
+  vSegmentProg = segmentProg;
 }
