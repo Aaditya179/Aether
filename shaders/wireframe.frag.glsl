@@ -27,7 +27,8 @@ void main() {
   // Soft glow intensity falloff curve
   float intensity = falloff * falloff;
 
-  vec3 rgb = uColorGlow * intensity * uGlow;
+  // HDR radiation past bloom threshold (0.6) for ethereal cyber corona
+  vec3 rgb = uColorGlow * intensity * (uGlow * 1.5);
   float alpha = intensity * clamp(uGlow, 0.0, 1.0);
 
   if (alpha < 0.002) {

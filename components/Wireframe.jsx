@@ -217,9 +217,26 @@ export default function Wireframe() {
       meshRef.current.rotation.z = 0;
     }
 
+    // 4. Glow calculation: 0.6 in Section 1, scaling to 1.4 in Section 3 per Task 3
+    let glowValue = 0.6;
+    if (dampedScroll.current < 0.30) {
+      glowValue = 0.6;
+    } else if (dampedScroll.current < 0.50) {
+      const localS2 = (dampedScroll.current - 0.30) / (0.50 - 0.30);
+      glowValue = 0.6 + localS2 * 0.4; // 0.6 to 1.0
+    } else if (dampedScroll.current < 0.70) {
+      const localS3 = (dampedScroll.current - 0.50) / (0.70 - 0.50);
+      // Gentle 1 Hz breathing pulse (safe: 1 cycle/sec << 3 flashes/sec limit)
+      const pulse = Math.sin(delta * 6.283) * 0.1;
+      glowValue = 1.0 + localS3 * 0.3 + pulse; // peaks at 1.4
+    } else {
+      glowValue = 1.0;
+    }
+
     if (materialRef.current) {
       materialRef.current.uniforms.uDrawProgress.value = currentDrawProgress.current;
       materialRef.current.uniforms.uCollapse.value = collapseProgress;
+      materialRef.current.uniforms.uGlow.value = glowValue;
     }
   });
 

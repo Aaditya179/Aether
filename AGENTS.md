@@ -550,12 +550,12 @@ Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your
 - [x] CP5: Wireframe draw-in
 - [x] CP6: Section text and layout
 - [x] CP7: Palette shifts
-- [ ] CP8: Final section collapse
+- [x] CP8: Final section collapse
 - [ ] CP9: Bloom and glow
 - [ ] CP10: Polish, performance, and accessibility
 - [ ] CP11: Handoff
 
-**Current checkpoint:** CP8
+**Current checkpoint:** CP9
 
 ---
 

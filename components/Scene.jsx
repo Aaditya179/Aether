@@ -8,6 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import Fallback from "./Fallback";
 import Background from "./Background";
 import Wireframe from "./Wireframe";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 
 class WebGLErrorBoundary extends Component {
   constructor(props) {
@@ -96,6 +97,15 @@ export default function Scene() {
           <color attach="background" args={["#0B0B0C"]} />
           <Background />
           <Wireframe />
+          <EffectComposer multisampling={0}>
+            <Bloom
+              luminanceThreshold={0.6}
+              intensity={0.9}
+              radius={0.4}
+              mipmapBlur
+              resolutionScale={isMobile ? 0.5 : 1.0}
+            />
+          </EffectComposer>
         </Canvas>
       </div>
     </WebGLErrorBoundary>

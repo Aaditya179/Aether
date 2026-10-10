@@ -100,5 +100,7 @@ void main() {
     finalColor = uColorAccentA;
   }
 
-  fragColor = vec4(finalColor, 1.0);
+  // Clamped below bloom threshold (0.6) so background edges stay crisp without bloom wash
+  vec3 outputColor = finalColor * 0.52;
+  fragColor = vec4(outputColor, 1.0);
 }
