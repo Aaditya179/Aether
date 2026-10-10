@@ -542,8 +542,8 @@ These decisions are open. Do not make them yourself. Ask at the gate noted.
 Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your own work complete.
 
 - [x] CP0: Project setup
-- [ ] CP1: Full-screen canvas
-- [ ] CP1.5: CI/CD pipeline and Vercel deployment
+- [x] CP1: Full-screen canvas
+- [ ] CP1.5: CI/CD pipeline and Vercel deployment (deferred)
 - [ ] CP2: Background shader
 - [ ] CP3: Static wireframe
 - [ ] CP4: Scroll store and container
@@ -555,7 +555,7 @@ Mark a checkpoint `[x]` only after the owner approves its gate. Do not mark your
 - [ ] CP10: Polish, performance, and accessibility
 - [ ] CP11: Handoff
 
-**Current checkpoint:** CP1
+**Current checkpoint:** CP2
 
 ---
 

@@ -6,6 +6,7 @@
 import React, { Component, useSyncExternalStore } from "react";
 import { Canvas } from "@react-three/fiber";
 import Fallback from "./Fallback";
+import Background from "./Background";
 
 class WebGLErrorBoundary extends Component {
   constructor(props) {
@@ -92,11 +93,7 @@ export default function Scene() {
           style={{ width: "100%", height: "100%" }}
         >
           <color attach="background" args={["#0B0B0C"]} />
-          {/* Temporary placeholder unit cube centered in the scene (will be replaced at CP3) */}
-          <mesh position={[0, 0, 0]}>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshBasicMaterial color="#D7FF3A" wireframe />
-          </mesh>
+          <Background />
         </Canvas>
       </div>
     </WebGLErrorBoundary>
